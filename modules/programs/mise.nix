@@ -72,7 +72,7 @@ in {
           disable_tools = ["node"];
         '';
         description = ''
-          Settings written to {file}`$XDG_CONFIG_HOME/mise/settings.toml`.
+          Settings written to {file}`$XDG_CONFIG_HOME/mise/config.toml`.
 
           See <https://mise.jdx.dev/configuration.html#settings-file-config-mise-settings-toml>
           for details on supported values.
@@ -86,11 +86,7 @@ in {
 
     xdg.configFile = {
       "mise/config.toml" = mkIf (cfg.globalConfig != { }) {
-        source = tomlFormat.generate "mise-config" cfg.globalConfig;
-      };
-
-      "mise/settings.toml" = mkIf (cfg.settings != { }) {
-        source = tomlFormat.generate "mise-settings" cfg.settings;
+        source = tomlFormat.generate "mise-config" (cfg.globalConfig // { settings = cfg.settings; });
       };
     };
 
