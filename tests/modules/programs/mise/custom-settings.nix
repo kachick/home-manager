@@ -10,12 +10,16 @@
         };
 
         aliases = { my_custom_node = "20"; };
+
+        settings = {
+          verbose = false;
+          experimental = true;
+          disable_tools = [ "node" ];
+        };
       };
-      settings = {
-        verbose = false;
-        experimental = true;
-        disable_tools = [ "node" ];
-      };
+        settings = {
+          foo = 42;
+        };
     };
   };
 

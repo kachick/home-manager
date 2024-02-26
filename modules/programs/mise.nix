@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.programs.mise;
+  mergeSettingsToml = lib.versionAtLeast cfg.package.version "v2024.1.17";
   tomlFormat = pkgs.formats.toml { };
 in {
   meta.maintainers = [ hm.maintainers.pedorich-n ];
@@ -82,6 +83,14 @@ in {
   };
 
   config = mkIf cfg.enable {
+            assertions =
+      [ { assertion = cfg.globalConfig.settings == null;
+          message = ''
+            settings should be defined special
+            '';
+        }
+      ];
+
     home.packages = [ cfg.package ];
 
     xdg.configFile = {
