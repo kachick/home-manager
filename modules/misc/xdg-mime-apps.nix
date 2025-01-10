@@ -100,13 +100,9 @@ in {
       in p: processLines (builtins.readFile (associations p));
     }
 
-    (mkIf cfg.enable {
+    (mkIf cfg.enable rec {
       assertions =
         [ (hm.assertions.assertPlatform "xdg.mimeApps" pkgs platforms.linux) ];
-
-      # Deprecated but still used by some applications.
-      xdg.dataFile."applications/mimeapps.list".source =
-        config.xdg.configFile."mimeapps.list".source;
 
       xdg.configFile."mimeapps.list".text =
         let joinValues = mapAttrs (n: concatStringsSep ";");
@@ -115,6 +111,10 @@ in {
           "Removed Associations" = joinValues cfg.associations.removed;
           "Default Applications" = joinValues cfg.defaultApplications;
         };
+
+      # Deprecated but still used by some applications.
+      xdg.dataFile."applications/mimeapps.list".text =
+        xdg.configFile."mimeapps.list".text;
     })
   ];
 }
